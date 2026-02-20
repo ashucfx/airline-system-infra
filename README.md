@@ -24,7 +24,7 @@
 
 This repository contains the complete infrastructure orchestration for the Airline Management System, including:
 
-- **4 Microservices**: API Gateway, Flights, Booking, Notification
+- **5 Services**: Frontend (Next.js), API Gateway, Flights, Booking, Notification
 - **Database**: MySQL 8.0 for persistent storage
 - **Message Broker**: RabbitMQ for asynchronous communication
 - **Networking**: Isolated bridge network for service communication
@@ -34,7 +34,9 @@ This repository contains the complete infrastructure orchestration for the Airli
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                      Frontend (Port TBD)                     │
+│                Frontend - Next.js (Port 3002)                │
+│  • Authentication UI  • Dashboard  • Flight Management      │
+│  • Booking Interface  • Admin Panel  • Analytics            │
 └───────────────────────────┬─────────────────────────────────┘
                             │
                             ↓
@@ -169,6 +171,7 @@ docker-compose exec api-gateway npm run migrate
 
 | Service | URL | Purpose |
 |---------|-----|---------|
+| **Frontend** | http://localhost:3002 | Web application UI |
 | **API Gateway** | http://localhost:8000 | Main entry point |
 | **Flights Service** | http://localhost:3000 | Flight management |
 | **Booking Service** | http://localhost:3001 | Booking operations |
@@ -176,7 +179,24 @@ docker-compose exec api-gateway npm run migrate
 | **RabbitMQ Management** | http://localhost:15672 | Queue monitoring |
 | **Health Checks** | http://localhost:PORT/health | Service status |
 
+**Default Credentials:**
+- Frontend Login: `admin@airline.com` / `admin123`
+- RabbitMQ: `airline_user` / (from .env)
+
 ## 🎯 Services
+
+### Frontend (Port 3002)
+- **Purpose**: User interface for airline management
+- **Technology**: Next.js 16, React 19, TypeScript, Tailwind CSS
+- **Dependencies**: API Gateway, Flights Service, Booking Service
+- **Features**: 
+  - JWT authentication with login/logout
+  - Dashboard with real-time statistics
+  - Flight management interface
+  - Booking management interface
+  - Responsive design
+  - Health check endpoint
+- **Repository**: [airline-frontend](https://github.com/ashucfx/airline-frontend)
 
 ### API Gateway (Port 8000)
 - **Purpose**: Authentication, routing, rate limiting

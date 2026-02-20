@@ -195,6 +195,47 @@ services:
       retries: 3
       start_period: 40s
 
+  # Frontend Application
+  frontend:
+    build:
+      context: ../airline-frontend
+      dockerfile: Dockerfile
+    container_name: airline-frontend
+    restart: unless-stopped
+    ports:
+      - "${FRONTEND_PORT:-3002}:3000"
+    environment:
+      # API Service URLs (internal Docker network)
+      NEXT_PUBLIC_API_GATEWAY_URL: http://api-gateway:8000
+      NEXT_PUBLIC_FLIGHTS_SERVICE_URL: http://flights-service:3000
+      NEXT_PUBLIC_BOOKING_SERVICE_URL: http://booking-service:3001
+      
+      # Feature Flags
+      NEXT_PUBLIC_ENABLE_ANALYTICS: ${ENABLE_ANALYTICS:-true}
+      NEXT_PUBLIC_ENABLE_NOTIFICATIONS: ${ENABLE_NOTIFICATIONS:-true}
+      
+      # Application Info
+      NEXT_PUBLIC_APP_NAME: ${APP_NAME:-Airline Management System}
+      NEXT_PUBLIC_APP_VERSION: ${APP_VERSION:-1.0.0}
+      
+      # Next.js Environment
+      NODE_ENV: production
+    depends_on:
+      api-gateway:
+        condition: service_healthy
+      flights-service:
+        condition: service_healthy
+      booking-service:
+        condition: service_healthy
+    networks:
+      - airline-network
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/api/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
 # Networks
 networks:
   airline-network:
