@@ -17,7 +17,7 @@ services:
     networks:
       - airline-network
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -39,11 +39,11 @@ services:
     networks:
       - airline-network
     healthcheck:
-      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
-      interval: 10s
-      timeout: 5s
+      test: [ "CMD", "rabbitmq-diagnostics", "-q", "ping" ]
+      interval: 30s
+      timeout: 15s
       retries: 5
-      start_period: 30s
+      start_period: 60s
 
   # Flights Service
   flights-service:
@@ -70,7 +70,7 @@ services:
     networks:
       - airline-network
     healthcheck:
-      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"]
+      test: [ "CMD", "node", "-e", "require('http').get('http://localhost:3000/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})" ]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -108,7 +108,7 @@ services:
     networks:
       - airline-network
     healthcheck:
-      test: ["CMD", "node", "-e", "require('http').get('http://localhost:4000/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"]
+      test: [ "CMD", "node", "-e", "require('http').get('http://localhost:4000/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})" ]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -147,11 +147,11 @@ services:
     networks:
       - airline-network
     healthcheck:
-      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3001/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"]
+      test: [ "CMD", "node", "-e", "require('http').get('http://localhost:3001/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})" ]
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 40s
+      start_period: 60s
 
   # API Gateway
   api-gateway:
@@ -189,7 +189,7 @@ services:
     networks:
       - airline-network
     healthcheck:
-      test: ["CMD", "node", "-e", "require('http').get('http://localhost:8000/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"]
+      test: [ "CMD", "node", "-e", "require('http').get('http://localhost:8000/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})" ]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -209,15 +209,15 @@ services:
       NEXT_PUBLIC_API_GATEWAY_URL: http://localhost:8000
       NEXT_PUBLIC_FLIGHTS_SERVICE_URL: http://localhost:8000/flightsService
       NEXT_PUBLIC_BOOKING_SERVICE_URL: http://localhost:8000/bookingService
-      
+
       # Feature Flags
       NEXT_PUBLIC_ENABLE_ANALYTICS: ${ENABLE_ANALYTICS:-true}
       NEXT_PUBLIC_ENABLE_NOTIFICATIONS: ${ENABLE_NOTIFICATIONS:-true}
-      
+
       # Application Info
       NEXT_PUBLIC_APP_NAME: ${APP_NAME:-Airline Management System}
       NEXT_PUBLIC_APP_VERSION: ${APP_VERSION:-1.0.0}
-      
+
       # Next.js Environment
       NODE_ENV: production
     depends_on:
@@ -230,7 +230,7 @@ services:
     networks:
       - airline-network
     healthcheck:
-      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/api/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"]
+      test: [ "CMD", "node", "-e", "require('http').get('http://localhost:3000/api/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})" ]
       interval: 30s
       timeout: 10s
       retries: 3
