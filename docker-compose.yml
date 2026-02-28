@@ -10,7 +10,7 @@ services:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
     ports:
-      - "${MYSQL_PORT:-3306}:3306"
+      - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
       - ./init-scripts:/docker-entrypoint-initdb.d
@@ -205,10 +205,10 @@ services:
     ports:
       - "${FRONTEND_PORT:-3002}:3000"
     environment:
-      # API Service URLs (internal Docker network)
-      NEXT_PUBLIC_API_GATEWAY_URL: http://api-gateway:8000
-      NEXT_PUBLIC_FLIGHTS_SERVICE_URL: http://flights-service:3000
-      NEXT_PUBLIC_BOOKING_SERVICE_URL: http://booking-service:3001
+      # API Service URLs (exposed via API Gateway)
+      NEXT_PUBLIC_API_GATEWAY_URL: http://localhost:8000
+      NEXT_PUBLIC_FLIGHTS_SERVICE_URL: http://localhost:8000/flightsService
+      NEXT_PUBLIC_BOOKING_SERVICE_URL: http://localhost:8000/bookingService
       
       # Feature Flags
       NEXT_PUBLIC_ENABLE_ANALYTICS: ${ENABLE_ANALYTICS:-true}
