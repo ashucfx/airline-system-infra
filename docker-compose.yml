@@ -205,18 +205,12 @@ services:
     ports:
       - "${FRONTEND_PORT:-3002}:3000"
     environment:
-      # API Service URLs (exposed via API Gateway)
-      NEXT_PUBLIC_API_GATEWAY_URL: http://localhost:8000
-      NEXT_PUBLIC_FLIGHTS_SERVICE_URL: http://localhost:8000/flightsService
-      NEXT_PUBLIC_BOOKING_SERVICE_URL: http://localhost:8000/bookingService
-
-      # Feature Flags
-      NEXT_PUBLIC_ENABLE_ANALYTICS: ${ENABLE_ANALYTICS:-true}
-      NEXT_PUBLIC_ENABLE_NOTIFICATIONS: ${ENABLE_NOTIFICATIONS:-true}
-
-      # Application Info
-      NEXT_PUBLIC_APP_NAME: ${APP_NAME:-Airline Management System}
-      NEXT_PUBLIC_APP_VERSION: ${APP_VERSION:-1.0.0}
+      # Server-side env vars used by Next.js rewrites (next.config.ts)
+      # These proxy /proxy/* requests to the actual backend services on the Docker network.
+      GATEWAY_SERVICE_URL: http://api-gateway:8000
+      FLIGHTS_SERVICE_URL: http://flights-service:3000
+      BOOKING_SERVICE_URL: http://booking-service:3001
+      NOTIFICATION_SERVICE_URL: http://notification-service:4000
 
       # Next.js Environment
       NODE_ENV: production
